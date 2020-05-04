@@ -16,7 +16,9 @@ let enemy = {
     speed: 5,
     moving: 0,
     dirx: 0,
-    diry: 0
+    diry: 0,
+    flash: 0,
+    ghosteat: false
 }
 
 let powerdot = {
@@ -108,7 +110,7 @@ function render() {
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    if (!powerdot.powerUp) {
+    if (!powerdot.powerUp && powerdot.pcountdown < 5) {
         powerdot.x = myNum(420) + 30;
         powerdot.y = myNum(250);
         powerdot.powerUp = true;
@@ -167,6 +169,16 @@ function render() {
         enemy.ghostNum = 384;
         powerdot.x = 0;
         powerdot.y = 0;
+        powerdot.ghosteat = true;
+    }
+
+
+    if (powerdot.ghosteat) {
+        powerdot.pcountdown--;
+        if (powerdot.pcountdown <= 0) {
+            powerdot.ghostNum = false;
+            enemy.ghostNum = powerdot.ghostNum;
+        }
     }
 
     if (powerdot.powerUp) {
@@ -178,6 +190,12 @@ function render() {
 
     }
 
+    if (enemy.flash == 0) {
+        enemy.flash = 32;
+    } else {
+        enemy.flash = 0;
+    }
+
     // Tamaño y tipo de fuente
     context.font = '20px Verdana';
     // Color de la fuente
@@ -187,7 +205,7 @@ function render() {
     // context.fillText('Pacman: ' + score + ' vs Ghost: ' + gscore, 2, 18);
 
     //Creando el enemigo con una aparición alejada de pac
-    context.drawImage(mainImage, enemy.ghostNum, 0, 32, 32, enemy.x, enemy.y, 32, 32);
+    context.drawImage(mainImage, enemy.ghostNum, enemy.flash, 32, 32, enemy.x, enemy.y, 32, 32);
     context.drawImage(mainImage, player.pacmouth, player.pacdir, 32, 32, player.x, player.y, 32, 32);
 
 }
