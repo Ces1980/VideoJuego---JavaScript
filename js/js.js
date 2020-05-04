@@ -109,8 +109,8 @@ function render() {
     }
 
     if (enemy.moving < 0) {
-        enemy.moving = (myNum(36) * 3) + 10 + myNum(1);
-        enemy.speed = myNum(4) + 1;
+        enemy.moving = (myNum(20) * 3) + myNum(1);
+        enemy.speed = myNum(3) + 1;
         enemy.dirx = 0;
         enemy.diry = 0;
         if (enemy.moving % 2) {
@@ -130,6 +130,19 @@ function render() {
     enemy.moving--;
     enemy.x = enemy.x + enemy.dirx;
     enemy.y = enemy.y + enemy.diry;
+
+    if (enemy.x >= (canvas.width - 32)) {
+        enemy.x = 0;
+    }
+    if (enemy.y >= (canvas.height - 32)) {
+        enemy.y = 0;
+    }
+    if (enemy.x < 0) {
+        enemy.x = (canvas.width - 32);
+    }
+    if (enemy.y < 0) {
+        enemy.y = (canvas.height - 32);
+    }
 
 
     // Tamaño y tipo de fuente
