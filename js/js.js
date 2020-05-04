@@ -165,7 +165,24 @@ function render() {
         enemy.y = (canvas.height - 32);
     }
 
-    // Collision detection
+    // Collision detection ghost
+    if (player.x <= (enemy.x + 26) && enemy.x <= (player.x + 26) && player.y <= (enemy.y + 26) && enemy.y <= (player.y + 32)) {
+        console.log('ghost');
+        if (powerdot.ghosteat) {
+            score++;
+        } else {
+            gscore++;
+        }
+        // Al ser tocado por el ghost
+        player.x = 10;
+        player.y = 100;
+        enemy.x = 300;
+        enemy.y = 200;
+        powerdot.pcountdown = 0;
+    }
+
+
+    // Collision detection powerup
     if (player.x <= powerdot.x && powerdot.x <= (player.x + 32) && player.y <= powerdot.y && powerdot.y <= (player.y + 32)) {
         console.log('hit');
         powerdot.powerUp = false;
