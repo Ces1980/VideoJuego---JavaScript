@@ -1,5 +1,8 @@
 // Variables para el marcador
-let score = 0, gscore = 0, ghost = false;
+let score = 0,
+    gscore = 0,
+    countblink = 10,
+    ghost = false;
 
 let player = {
     x: 50,
@@ -112,7 +115,7 @@ function render() {
 
     if (!powerdot.powerUp && powerdot.pcountdown < 5) {
         powerdot.x = myNum(420) + 30;
-        powerdot.y = myNum(250);
+        powerdot.y = myNum(250) + 30;
         powerdot.powerUp = true;
     }
 
@@ -192,6 +195,7 @@ function render() {
         powerdot.x = 0;
         powerdot.y = 0;
         powerdot.ghosteat = true;
+        player.speed = 10;
     }
 
 
@@ -200,16 +204,23 @@ function render() {
         if (powerdot.pcountdown <= 0) {
             powerdot.ghostNum = false;
             enemy.ghostNum = powerdot.ghostNum;
+            player.speed = 5;
         }
     }
-
+    //draw power up dot
     if (powerdot.powerUp) {
         context.fillStyle = "#ffff";
         context.beginPath();
         context.arc(powerdot.x, powerdot.y, 10, 0, Math.PI * 2, true);
         context.closePath();
         context.fill();
+    }
 
+    //enemy blinking
+    if (countblink > 0) {
+        countblink--;
+    } else {
+        countblink = 20;
     }
 
     if (enemy.flash == 0) {
