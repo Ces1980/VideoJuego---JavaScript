@@ -1,4 +1,14 @@
+// Variables para el marcador
+let score = 0;
+let gscore = 0;
 
+let player = {
+    x: 50,
+    y: 100,
+    pacmouth: 320,
+    pacdir: 0,
+    psize: 32
+}
 
 let canvas = document.createElement('canvas');
 let context = canvas.getContext('2d');
@@ -26,11 +36,17 @@ function playGame() {
 
 // El metodo render va a cambiar el lienzo de color y le va a dar dimenciones
 function render() {
-    context.fillStyle = 'black';
+    context.fillStyle = 'blue';
     context.fillRect(0, 0, canvas.width, canvas.height);
-    // drawImage proporciona diferentes formas para dibujar una imagen (en nuestro caso pac.png) dentro de canvas
-    // Se ha extraido la localicación de la imagen que se va a usar dando parametros https://developer.mozilla.org/es/docs/Web/API/CanvasRenderingContext2D/drawImage
-    context.drawImage(mainImage, 320, 0, 32, 32, 50, 50, 32, 32);
+
+    context.drawImage(mainImage, player.pacmouth, player.pacdir, 32, 32, player.x, player.y, 32, 32);
+    // Tamaño y tipo de fuente
+    context.font = '20px Verdana';
+    // Color de la fuente
+    context.fillStyle = 'white';
+    //Mensaje y posicionamiento del marcador
+    context.fillText(`Pacman: ${score} vs Ghost: ${gscore}`, 2, 18);
+    // context.fillText('Pacman: ' + score + ' vs Ghost: ' + gscore, 2, 18);
 }
 // Se incrusta canvas al documento
 document.body.appendChild(canvas);
