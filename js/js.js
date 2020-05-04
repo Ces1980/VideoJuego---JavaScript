@@ -28,6 +28,9 @@ function playGame() {
 function render() {
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
+    // drawImage proporciona diferentes formas para dibujar una imagen (en nuestro caso pac.png) dentro de canvas
+    // Se ha extraido la localicación de la imagen que se va a usar dando parametros https://developer.mozilla.org/es/docs/Web/API/CanvasRenderingContext2D/drawImage
+    context.drawImage(mainImage, 320, 0, 32, 32, 50, 50, 32, 32);
 }
 // Se incrusta canvas al documento
 document.body.appendChild(canvas);
