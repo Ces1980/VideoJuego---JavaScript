@@ -2,7 +2,8 @@
 let score = 0,
     gscore = 0,
     countblink = 10,
-    ghost = false;
+    ghost = false,
+    ghost2 = false;
 
 let player = {
     x: 50,
@@ -24,12 +25,24 @@ let enemy = {
     ghosteat: false
 }
 
+let enemy2 = {
+    x: 150,
+    y: 200,
+    speed: 5,
+    moving: 0,
+    dirx: 0,
+    diry: 0,
+    flash: 0,
+    ghosteat: false
+}
+
 let powerdot = {
     x: 10,
     y: 10,
     powerUp: false,
     pcountdown: 0,
-    ghostNum: 0
+    ghostNum: 0,
+    ghostNum2: 0
 }
 
 let canvas = document.createElement('canvas');
@@ -127,9 +140,17 @@ function render() {
         ghost = true;
     }
 
+    if (!ghost2) {
+        enemy2.ghostNum = myNum(5) * 64;
+        enemy2.x = myNum(450);
+        enemy2.y = myNum(250) + 30;
+        ghost2 = true;
+    }
+
+    // Movimientos del enemigo 1
     if (enemy.moving < 0) {
         enemy.moving = (myNum(20) * 3) + myNum(1);
-        enemy.speed = myNum(3) + 1;
+        enemy.speed = myNum(2) + 1;
         enemy.dirx = 0;
         enemy.diry = 0;
 
@@ -168,6 +189,49 @@ function render() {
         enemy.y = (canvas.height - 32);
     }
 
+
+    // Movimientos del enemigo 2
+    if (enemy2.moving < 0) {
+        enemy2.moving = (myNum(20) * 3) + myNum(1);
+        enemy2.speed = myNum(3) + 1;
+        enemy2.dirx = 0;
+        enemy2.diry = 0;
+
+        if (powerdot.ghosteat) {
+            enemy2.speed = enemy2.speed * -1;
+        }
+
+        if (enemy2.moving % 2) {
+            if (player.x < enemy2.x) {
+                enemy.dirx = -enemy.speed;
+            } else {
+                enemy2.dirx = enemy2.speed;
+            }
+        } else {
+            if (player.y < enemy2.y) {
+                enemy2.diry = -enemy2.speed;
+            } else {
+                enemy2.diry = enemy2.speed;
+            }
+        }
+    }
+    enemy2.moving--;
+    enemy2.x = enemy2.x + enemy2.dirx;
+    enemy2.y = enemy2.y + enemy2.diry;
+
+    if (enemy2.x >= (canvas.width - 32)) {
+        enemy2.x = 0;
+    }
+    if (enemy2.y >= (canvas.height - 32)) {
+        enemy.y = 0;
+    }
+    if (enemy2.x < 0) {
+        enemy2.x = (canvas.width - 32);
+    }
+    if (enemy2.y < 0) {
+        enemy2.y = (canvas.height - 32);
+    }
+
     // Collision detection ghost
     if (player.x <= (enemy.x + 26) && enemy.x <= (player.x + 26) && player.y <= (enemy.y + 26) && enemy.y <= (player.y + 32)) {
         console.log('ghost');
@@ -184,14 +248,31 @@ function render() {
         powerdot.pcountdown = 0;
     }
 
+    // Collision detection ghost 2
+    if (player.x <= (enemy2.x + 26) && enemy2.x <= (player.x + 26) && player.y <= (enemy2.y + 26) && enemy2.y <= (player.y + 32)) {
+        console.log('ghost');
+        if (powerdot.ghosteat) {
+            score++;
+        } else {
+            gscore++;
+        }
+        // Al ser tocado por el ghost
+        player.x = 10;
+        player.y = 100;
+        enemy2.x = 300;
+        enemy2.y = 200;
+        powerdot.pcountdown = 0;
+    }
+
 
     // Collision detection powerup
     if (player.x <= powerdot.x && powerdot.x <= (player.x + 32) && player.y <= powerdot.y && powerdot.y <= (player.y + 32)) {
         console.log('hit');
         powerdot.powerUp = false;
         powerdot.pcountdown = 500;
-        powerdot.ghostNum = enemy.ghostNum;
+        powerdot.ghostNum2 = enemy2.ghostNum;
         enemy.ghostNum = 384;
+        enemy2.ghostNum = 384;
         powerdot.x = 0;
         powerdot.y = 0;
         powerdot.ghosteat = true;
@@ -204,6 +285,7 @@ function render() {
         if (powerdot.pcountdown <= 0) {
             powerdot.ghostNum = false;
             enemy.ghostNum = powerdot.ghostNum;
+            enemy2.ghostNum = powerdot.ghostNum;
             player.speed = 5;
         }
     }
@@ -225,8 +307,10 @@ function render() {
 
     if (enemy.flash == 0) {
         enemy.flash = 32;
+        enemy2.flash = 32;
     } else {
         enemy.flash = 0;
+        enemy2.flash = 0;
     }
 
     // Tamaño y tipo de fuente
@@ -237,7 +321,9 @@ function render() {
     context.fillText(`Pacman: ${score} vs Ghost: ${gscore}`, 2, 18);
     // context.fillText('Pacman: ' + score + ' vs Ghost: ' + gscore, 2, 18);
 
+
     //Creando el enemigo con una aparición alejada de pac
+    context.drawImage(mainImage, enemy2.ghostNum, enemy2.flash, 32, 32, enemy2.x, enemy2.y, 32, 32);
     context.drawImage(mainImage, enemy.ghostNum, enemy.flash, 32, 32, enemy.x, enemy.y, 32, 32);
     context.drawImage(mainImage, player.pacmouth, player.pacdir, 32, 32, player.x, player.y, 32, 32);
 
