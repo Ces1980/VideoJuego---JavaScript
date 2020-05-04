@@ -11,6 +11,12 @@ let player = {
     speed: 5
 }
 
+let enemy = {
+    x: 150,
+    y: 200,
+    speed: 5
+}
+
 let canvas = document.createElement('canvas');
 let context = canvas.getContext('2d');
 canvas.width = 600;
@@ -79,14 +85,14 @@ function checkReady() {
 // playgame de momento solo va a mandar llmar al metodo render
 function playGame() {
     render();
+    requestAnimationFrame(playGame);
 }
 
 // El metodo render va a cambiar el lienzo de color y le va a dar dimenciones
 function render() {
-    context.fillStyle = 'blue';
+    context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
-    context.drawImage(mainImage, player.pacmouth, player.pacdir, 32, 32, player.x, player.y, 32, 32);
     // Tamaño y tipo de fuente
     context.font = '20px Verdana';
     // Color de la fuente
@@ -94,6 +100,10 @@ function render() {
     //Mensaje y posicionamiento del marcador
     context.fillText(`Pacman: ${score} vs Ghost: ${gscore}`, 2, 18);
     // context.fillText('Pacman: ' + score + ' vs Ghost: ' + gscore, 2, 18);
+
+    context.drawImage(mainImage, 0, 0, 32, 32, enemy.x, enemy.y, 32, 32);
+    context.drawImage(mainImage, player.pacmouth, player.pacdir, 32, 32, player.x, player.y, 32, 32);
+
 }
 // Se incrusta canvas al documento
 document.body.appendChild(canvas);
