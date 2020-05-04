@@ -41,11 +41,32 @@ document.addEventListener("keyup", function (event) {
 
 // Al renderizar cargar los movimientos del jugador
 function move(keyclick) {
-    // (código del teclado al hacer click) { indicar movimiento en el plano}
+    // (código del teclado al hacer click) { indicar movimiento en el plano -> avanzar  -- para donde avanzar}
     if (37 in keyclick) { player.x -= player.speed; player.pacdir = 64; }
     if (38 in keyclick) { player.y -= player.speed; player.pacdir = 96; }
     if (39 in keyclick) { player.x += player.speed; player.pacdir = 0; }
     if (40 in keyclick) { player.y += player.speed; player.pacdir = 32; }
+
+    // Indicar que cuando el persona salga del plano entre inmediatamente en la parte contraria salga adelante entre atrás salga arriba entre abajo y viseversa
+    if (player.x >= (canvas.width - 32)) {
+        player.x = 0;
+    }
+    if (player.y >= (canvas.height - 32)) {
+        player.y = 0;
+    }
+    if (player.x < 0) {
+        player.x = (canvas.width - 32);
+    }
+    if (player.y < 0) {
+        player.y = (canvas.height - 32);
+    }
+
+    // Indicar el movimiento de la apertura del personaje
+    if (player.pacmouth == 320) {
+        player.pacmouth = 352;
+    } else {
+        player.pacmouth = 320;
+    }
     render();
 }
 
