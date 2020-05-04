@@ -19,6 +19,12 @@ let enemy = {
     diry: 0
 }
 
+let powerdot = {
+    x: 10,
+    y: 10,
+    powerUp: false
+}
+
 let canvas = document.createElement('canvas');
 let context = canvas.getContext('2d');
 canvas.width = 600;
@@ -100,6 +106,12 @@ function render() {
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
 
+    if (!powerdot.powerUp) {
+        powerdot.x = myNum(420) + 30;
+        powerdot.y = myNum(250);
+        powerdot.powerUp = true;
+    }
+
     // Ghost se inicializo en false. Con esta condición se indica que si no hay un fantasma lo cree en las coordenadas declaradas
     if (!ghost) {
         enemy.ghostNum = myNum(5) * 64;
@@ -144,6 +156,14 @@ function render() {
         enemy.y = (canvas.height - 32);
     }
 
+    if (powerdot.powerUp) {
+        context.fillStyle = "#ffff";
+        context.beginPath();
+        context.arc(powerdot.x, powerdot.y, 10, 0, Math.PI * 2, true);
+        context.closePath();
+        context.fill();
+
+    }
 
     // Tamaño y tipo de fuente
     context.font = '20px Verdana';
