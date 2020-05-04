@@ -129,6 +129,11 @@ function render() {
         enemy.speed = myNum(3) + 1;
         enemy.dirx = 0;
         enemy.diry = 0;
+
+        if (powerdot.ghosteat) {
+            enemy.speed = enemy.speed * -1;
+        }
+
         if (enemy.moving % 2) {
             if (player.x < enemy.x) {
                 enemy.dirx = -enemy.speed;
