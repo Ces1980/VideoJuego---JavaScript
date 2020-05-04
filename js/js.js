@@ -13,7 +13,10 @@ let player = {
 let enemy = {
     x: 150,
     y: 200,
-    speed: 5
+    speed: 5,
+    moving: 0,
+    dirx: 0,
+    diry: 0
 }
 
 let canvas = document.createElement('canvas');
@@ -104,6 +107,30 @@ function render() {
         enemy.y = myNum(250) + 30;
         ghost = true;
     }
+
+    if (enemy.moving < 0) {
+        enemy.moving = (myNum(36) * 3) + 10 + myNum(1);
+        enemy.speed = myNum(4) + 1;
+        enemy.dirx = 0;
+        enemy.diry = 0;
+        if (enemy.moving % 2) {
+            if (player.x < enemy.x) {
+                enemy.dirx = -enemy.speed;
+            } else {
+                enemy.dirx = enemy.speed
+            }
+        } else {
+            if (player.y < enemy.y) {
+                enemy.diry = -enemy.speed;
+            } else {
+                enemy.diry = enemy.speed
+            }
+        }
+    }
+    enemy.moving--;
+    enemy.x = enemy.x + enemy.dirx;
+    enemy.y = enemy.y + enemy.diry;
+
 
     // Tamaño y tipo de fuente
     context.font = '20px Verdana';
