@@ -1,6 +1,5 @@
 // Variables para el marcador
-let score = 0;
-let gscore = 0;
+let score = 0, gscore = 0, ghost = false;
 
 let player = {
     x: 50,
@@ -88,10 +87,23 @@ function playGame() {
     requestAnimationFrame(playGame);
 }
 
+// Generar un número random para crear un lugar de aparación del fantasma al asar
+function myNum(n) {
+    return Math.floor(Math.random() * n);
+}
+
 // El metodo render va a cambiar el lienzo de color y le va a dar dimenciones
 function render() {
     context.fillStyle = 'black';
     context.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Ghost se inicializo en false. Con esta condición se indica que si no hay un fantasma lo cree en las coordenadas declaradas
+    if (!ghost) {
+        enemy.ghostNum = myNum(5) * 64;
+        enemy.x = myNum(450);
+        enemy.y = myNum(250) + 30;
+        ghost = true;
+    }
 
     // Tamaño y tipo de fuente
     context.font = '20px Verdana';
@@ -101,7 +113,8 @@ function render() {
     context.fillText(`Pacman: ${score} vs Ghost: ${gscore}`, 2, 18);
     // context.fillText('Pacman: ' + score + ' vs Ghost: ' + gscore, 2, 18);
 
-    context.drawImage(mainImage, 0, 0, 32, 32, enemy.x, enemy.y, 32, 32);
+    //Creando el enemigo con una aparición alejada de pac
+    context.drawImage(mainImage, enemy.ghostNum, 0, 32, 32, enemy.x, enemy.y, 32, 32);
     context.drawImage(mainImage, player.pacmouth, player.pacdir, 32, 32, player.x, player.y, 32, 32);
 
 }
